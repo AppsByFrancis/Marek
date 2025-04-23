@@ -239,12 +239,7 @@ async function handler(collection) {
 
         for (const key of keys)
         {
-            const jsonResult = [
-                {
-                    owner: "HsSDDfuoZHWKabt69E1YZSqMpuNh7sHpbzDp1Cssu2VE",
-                    address: "HsSDDfuoZHWKabt69E1YZSqMpuNh7sHpbzDp1Cssu2VE",
-                }
-            ]
+            const jsonResult = await handler(key);
 
             const transactions = generateTransactions(NUM_DROPS_PER_TX, jsonResult, FROM_KEY_PAIR.publicKey, amount[i]);
             const results = await executeTransactions(SOLANA_CONNECTION, transactions, FROM_KEY_PAIR);
