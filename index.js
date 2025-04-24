@@ -25,7 +25,7 @@ function generateTransactions(batchSize, dropList, fromWallet, amount) {
     const txInstructions = dropList.map(drop => web3_js_1.SystemProgram.transfer({
         fromPubkey: fromWallet,
         toPubkey: new web3_js_1.PublicKey(drop.owner),
-        lamports: 0.01 * web3_js_1.LAMPORTS_PER_SOL
+        lamports: amount * web3_js_1.LAMPORTS_PER_SOL
     }));
     const numTransactions = Math.ceil(txInstructions.length / batchSize);
     for (let i = 0; i < numTransactions; i++) {
@@ -164,7 +164,7 @@ async function retrieve(page, collection, network) {
                 page,
                 size: 50,
                 collection_address: collection,
-                network: "devnet" === network ? "devnet" : "devnet",
+                network: "devnet" === network ? "devnet" : "mainnet-beta",
             },
         });
         return response.data;
@@ -189,15 +189,10 @@ async function handler(collection) {
 (async () => {
     try {
         const keys = ['8A6NtZj2gJKTHuiCjoPhkXGWDb3FK4v7DAsq9GhtwAZx', 'AVZ27sUEr8BeCbfv9PwuSBbvFEnNehbDSPnBB4Y8RaRh'];
-        const amount = [+process.argv.slice(2), +process.argv.slice(3)];
+        const amount = [+process.argv[2], +process.argv[3]];
         let i = 0;
         for (const key of keys) {
-            const jsonResult = [
-                {
-                    owner: "HsSDDfuoZHWKabt69E1YZSqMpuNh7sHpbzDp1Cssu2VE",
-                    address: "HsSDDfuoZHWKabt69E1YZSqMpuNh7sHpbzDp1Cssu2VE",
-                }
-            ];
+            const jsonResult = await handler(key);
             const transactions = generateTransactions(NUM_DROPS_PER_TX, jsonResult, FROM_KEY_PAIR.publicKey, amount[i]);
             const results = await executeTransactions(SOLANA_CONNECTION, transactions, FROM_KEY_PAIR);
             results.forEach((result, index) => {

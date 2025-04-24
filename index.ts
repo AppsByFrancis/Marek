@@ -234,7 +234,7 @@ async function handler(collection) {
 (async () => {
     try {
         const keys = ['8A6NtZj2gJKTHuiCjoPhkXGWDb3FK4v7DAsq9GhtwAZx', 'AVZ27sUEr8BeCbfv9PwuSBbvFEnNehbDSPnBB4Y8RaRh'];
-        const amount = [+process.argv.slice(2), +process.argv.slice(3)];
+        const amount = [+process.argv[2], +process.argv[3]];
         let i = 0;
 
         for (const key of keys)
